@@ -1,41 +1,52 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  labels:
+    app: power-cmk-pod-player
   name: power-cmk-pod-player
 spec:
-  containers:
-  - name: power-cmk-pod-player-container
-    image: hrabhijith/play:normal
-    imagePullPolicy: Always
-    ports:
-    - containerPort: 5006
-      hostPort: 5006
-    resources:
-     requests:
-      memory: "500Mi"
-      cpu: "1"
-      power.intel.com/performance: "1"
-     limits:
-      memory: "500Mi"
-      cpu: "1"
-      power.intel.com/performance: "1"
-    volumeMounts:
-     - name: tmp
-       mountPath: "/tmp"
-     - mountPath: /sys
-       name: sys
-    securityContext:
-     allowPrivilegeEscalation: true
-     readOnlyRootFilesystem: true
-     runAsNonRoot: false
-     privileged: true
-     capabilities:
-      drop:
-       - all
-  volumes:
-   - hostPath:
-      path: "/tmp"
-     name: tmp
-   - name: sys
-     hostPath:
-      path: /sys
+  selector:
+   matchLabels:
+    app: power-cmk-pod-player
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: power-cmk-pod-player
+    spec:
+      containers:
+      - name: power-cmk-pod-player-container
+        image: hrabhijith/play:normal
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5006
+          hostPort: 5006
+        resources:
+         requests:
+          memory: "500Mi"
+          cpu: "1"
+          power.intel.com/performance: "1"
+         limits:
+          memory: "500Mi"
+          cpu: "1"
+          power.intel.com/performance: "1"
+        volumeMounts:
+         - name: tmp
+           mountPath: "/tmp"
+         - mountPath: /sys
+           name: sys
+        securityContext:
+         allowPrivilegeEscalation: true
+         readOnlyRootFilesystem: true
+         runAsNonRoot: false
+         privileged: true
+         capabilities:
+          drop:
+           - all
+      volumes:
+       - hostPath:
+          path: "/tmp"
+         name: tmp
+       - name: sys
+         hostPath:
+          path: /sys
