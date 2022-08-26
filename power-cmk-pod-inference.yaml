@@ -20,7 +20,7 @@ spec:
         ports:
          - containerPort: 5005
            hostPort: 5005
-         resources:
+        resources:
          requests:
           memory: "500Mi"
           cpu: "1"
